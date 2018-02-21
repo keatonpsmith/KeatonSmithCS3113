@@ -39,7 +39,7 @@ public:
 
 class Ball {
 private:
-	float xPos = 0.0f, yPos = 0.0f, vel = 0.5f, accel = 10.0f;
+	float xPos = 0.0f, yPos = 0.0f, vel = 0.4f, accel = 5.0f;
 	float xDir = 3.0f, yDir = 3.0f;
 public:
 	Ball() {}
@@ -126,24 +126,24 @@ int main(int argc, char *argv[]) {
 			}
 			if (event.type == SDL_KEYDOWN) {
 				if (event.key.keysym.scancode == SDL_SCANCODE_W && left.getTop() < 2.25f) {
-					left.setTop(left.getTop() + 0.3f);
-					left.setBottom(left.getBottom() + 0.3f);
-					leftRacket.Translate(0.0f, 0.3f, 0.0f);
+					left.setTop(left.getTop() + 0.1f);
+					left.setBottom(left.getBottom() + 0.1f);
+					leftRacket.Translate(0.0f, 0.1f, 0.0f);
 				}
 				else if (event.key.keysym.scancode == SDL_SCANCODE_S && left.getBottom() > -2.25f) {
-					left.setTop(left.getTop() - 0.3f);
-					left.setBottom(left.getBottom() - 0.3f);
-					leftRacket.Translate(0.0f, -0.3f, 0.0f);
+					left.setTop(left.getTop() - 0.1f);
+					left.setBottom(left.getBottom() - 0.1f);
+					leftRacket.Translate(0.0f, -0.1f, 0.0f);
 				}
 				if (event.key.keysym.scancode == SDL_SCANCODE_UP && right.getTop() < 2.25f) {
-					right.setTop(right.getTop() + 0.3f);
-					right.setBottom(right.getBottom() + 0.3f);
-					rightRacket.Translate(0.0f, 0.3f, 0.0f);
+					right.setTop(right.getTop() + 0.1f);
+					right.setBottom(right.getBottom() + 0.1f);
+					rightRacket.Translate(0.0f, 0.1f, 0.0f);
 				}
 				else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN && right.getBottom() > -2.25f) {
-					right.setTop(right.getTop() - 0.3f);
-					right.setBottom(right.getBottom() - 0.3f);
-					rightRacket.Translate(0.0f, -0.3f, 0.0f);
+					right.setTop(right.getTop() - 0.1f);
+					right.setBottom(right.getBottom() - 0.1f);
+					rightRacket.Translate(0.0f, -0.1f, 0.0f);
 				}
 			}
 		}
