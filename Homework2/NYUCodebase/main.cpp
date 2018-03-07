@@ -22,7 +22,7 @@ SDL_Window* displayWindow;
 class Racket {
 private:
 	int score = 0;
-	float left, right, top, bottom;
+	float left, right, top, bottom, vel;
 public:
 	Racket(float l, float r, float t, float b) : left(l), right(r), top(t), bottom(b) {}
 	float getLeft() { return left; }
@@ -35,6 +35,11 @@ public:
 	void setBottom(float b) { bottom = b; }
 	int getScore() { return score; }
 	void addScore() { score++; }
+	void move(float dir, float elap) {
+		vel = 0.1f * dir;
+		top += (vel * elap);
+		bottom += (vel * elap);
+	}
 };
 
 class Ball {
@@ -119,31 +124,38 @@ int main(int argc, char *argv[]) {
 	while (!done) {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		float lDir = 0.0f, rDir = 0.0f;
 
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
 				done = true;
 			}
 			if (event.type == SDL_KEYDOWN) {
-				if (event.key.keysym.scancode == SDL_SCANCODE_W && left.getTop() < 2.25f) {
-					left.setTop(left.getTop() + 0.1f);
-					left.setBottom(left.getBottom() + 0.1f);
-					leftRacket.Translate(0.0f, 0.1f, 0.0f);
+				if (event.key.keysym.scancode == SDL_SCANCODE_W) {
+					lDir = 0.1f;
 				}
-				else if (event.key.keysym.scancode == SDL_SCANCODE_S && left.getBottom() > -2.25f) {
-					left.setTop(left.getTop() - 0.1f);
-					left.setBottom(left.getBottom() - 0.1f);
-					leftRacket.Translate(0.0f, -0.1f, 0.0f);
+				else if (event.key.keysym.scancode == SDL_SCANCODE_S) {
+					lDir = -0.1f;
 				}
-				if (event.key.keysym.scancode == SDL_SCANCODE_UP && right.getTop() < 2.25f) {
-					right.setTop(right.getTop() + 0.1f);
-					right.setBottom(right.getBottom() + 0.1f);
-					rightRacket.Translate(0.0f, 0.1f, 0.0f);
+				if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
+					rDir = 0.1f;
 				}
-				else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN && right.getBottom() > -2.25f) {
-					right.setTop(right.getTop() - 0.1f);
-					right.setBottom(right.getBottom() - 0.1f);
-					rightRacket.Translate(0.0f, -0.1f, 0.0f);
+				else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
+					rDir = -0.1f;
+				}
+			}
+			if (event.type == SDL_KEYUP) {
+				if (event.key.keysym.scancode == SDL_SCANCODE_W) {
+					lDir = 0.0f;
+				}
+				else if (event.key.keysym.scancode == SDL_SCANCODE_S) {
+					lDir = 0.0f;
+				}
+				if (event.key.keysym.scancode == SDL_SCANCODE_UP) {
+					rDir = 0.0f;
+				}
+				else if (event.key.keysym.scancode == SDL_SCANCODE_DOWN) {
+					rDir = 0.0f;
 				}
 			}
 		}
@@ -223,6 +235,14 @@ int main(int argc, char *argv[]) {
 				ball.refresh();
 			}
 			else {
+				if (right.getTop() <= 2.25 && right.getBottom() >= -2.25) {
+					right.move(rDir, elapsed);
+					rightRacket.Translate(0.0f, rDir, 0.0f);
+				}
+				if (left.getTop() <= 2.25 && left.getBottom() >= -2.25) {
+					left.move(lDir, elapsed);
+					leftRacket.Translate(0.0f, lDir, 0.0f);
+				}
 				ball.move(elapsed);
 				ballMatrix.Translate((ball.getVel() * ball.getXDir() * elapsed), (ball.getVel() * ball.getYDir() * elapsed), 0.0f);
 			}
